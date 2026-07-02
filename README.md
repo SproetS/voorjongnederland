@@ -9,6 +9,7 @@ npm create astro@latest -- --template basics
 ## Project documentation
 
 - OAuth and Decap operations: `docs/operations/decap-oauth-vps.md`
+- Session report 2026-07-02: `docs/operations/session-2026-07-02.md`
 
 ## 🚀 Project Structure
 
