@@ -6,6 +6,10 @@ npm create astro@latest -- --template basics
 
 > 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
+## Project documentation
+
+- OAuth and Decap operations: `docs/operations/decap-oauth-vps.md`
+
 ## 🚀 Project Structure
 
 Inside of your Astro project, you'll see the following folders and files:
