@@ -1,0 +1,68 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import { getMainNavItems } from '../lib/navigation';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages', ({ data, id }) => !data.draft && id !== 'home' && id !== 'voor-jong-nederland');
+
+  return pages.map((page) => ({
+    params: { slug: page.id },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props as { page: CollectionEntry<'pages'> };
+
+const navItems = await getMainNavItems();
+
+const isRadioPage = page.id === 'radio';
+
+const episodes = isRadioPage
+  ? (await getCollection('podcasts', ({ data }) => !data.draft)).sort((a, b) => {
+      const byEpisode = (b.data.episodeNumber ?? 0) - (a.data.episodeNumber ?? 0);
+      if (byEpisode !== 0) return byEpisode;
+      return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
+    })
+  : [];
+
+const showFeatureImage = page.data.showFeatureImage ?? false;
+const { Content } = await render(page);
+---
+
+<Layout
+  title={page.data.title}
+  description={page.data.description}
+  navItems={navItems}
+  showFeatureImage={showFeatureImage}
+  featureImage={page.data.featureImage}
+  featureImageAlt={page.data.featureImageAlt ?? page.data.title}
+  pageClass={isRadioPage ? 'page-podcasts-overview page-radio-overview' : 'page-default'}
+  currentPath={`/${page.id}/`}
+>
+  {isRadioPage ? (
+    <section class="content-column--wide article-body">
+      <h1 class="sr-only">{page.data.title}</h1>
+      <Content />
+
+      <div class="podcast-grid">
+        {episodes.map((episode) => (
+          <a class="podcast-card" href={`/radio/${episode.id}/`} aria-label={episode.data.title}>
+            {episode.data.featureImage ? (
+              <img src={episode.data.featureImage} alt={episode.data.featureImageAlt ?? episode.data.title} loading="lazy" />
+            ) : (
+              <span>{episode.data.title}</span>
+            )}
+          </a>
+        ))}
+      </div>
+    </section>
+  ) : (
+    <article class="content-column article-body">
+      <header class="article-header">
+        <h1>{page.data.title}</h1>
+      </header>
+      <Content />
+    </article>
+  )}
+</Layout>

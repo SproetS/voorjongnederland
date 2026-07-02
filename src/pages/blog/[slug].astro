@@ -1,0 +1,67 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { getMainNavItems } from '../../lib/navigation';
+import DetailNavBar from '../../components/DetailNavBar.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props as { post: CollectionEntry<'blog'> };
+
+const navItems = await getMainNavItems();
+
+const orderedPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+);
+const currentIndex = orderedPosts.findIndex((entry) => entry.id === post.id);
+const newerPost = currentIndex > 0 ? orderedPosts[currentIndex - 1] : null;
+const olderPost =
+  currentIndex >= 0 && currentIndex < orderedPosts.length - 1 ? orderedPosts[currentIndex + 1] : null;
+
+const { Content } = await render(post);
+const showFeatureImage = post.data.showFeatureImage ?? Boolean(post.data.featureImage);
+---
+
+<Layout
+  title={post.data.title}
+  description={post.data.excerpt}
+  navItems={navItems}
+  showFeatureImage={showFeatureImage}
+  featureImage={post.data.featureImage}
+  featureImageAlt={post.data.featureImageAlt ?? post.data.title}
+  pageClass="page-news-detail"
+  currentPath="/nieuws/"
+>
+  <section class="content-column detail-page-shell">
+    <article class="article-body">
+    <header class="article-header">
+      <h1>{post.data.title}</h1>
+      <p class="meta">
+        {post.data.publishDate.toLocaleDateString('nl-NL', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}
+      </p>
+    </header>
+
+    <Content />
+
+    </article>
+
+    <DetailNavBar
+      previousHref={newerPost ? `/nieuws/${newerPost.id}/` : null}
+      overviewHref="/nieuws/"
+      nextHref={olderPost ? `/nieuws/${olderPost.id}/` : null}
+      ariaLabel="Nieuwsnavigatie"
+      bottomSpacingUnits={0}
+    />
+  </section>
+</Layout>

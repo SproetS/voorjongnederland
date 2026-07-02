@@ -1,0 +1,31 @@
+---
+import { getEntry } from 'astro:content';
+import HomeTiles from '../components/HomeTiles.astro';
+import Layout from '../layouts/Layout.astro';
+import { getMainNavItems } from '../lib/navigation';
+
+const home = await getEntry('pages', 'home');
+if (!home) {
+  throw new Error('Homepagina ontbreekt in src/content/pages/home.md');
+}
+
+const navItems = await getMainNavItems();
+
+const showFeatureImage = home.data.showFeatureImage ?? true;
+const homeTiles = home.data.homeTiles ?? [];
+---
+
+<Layout
+  title={home.data.title}
+  description={home.data.description}
+  navItems={navItems}
+  showFeatureImage={showFeatureImage}
+  featureImage={home.data.featureImage}
+  featureImageAlt={home.data.featureImageAlt ?? home.data.title}
+  pageClass="page-home"
+  currentPath="/"
+>
+  <section class="content-column--wide article-body article-home">
+    <HomeTiles tiles={homeTiles} />
+  </section>
+</Layout>

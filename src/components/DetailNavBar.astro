@@ -1,0 +1,102 @@
+---
+interface Props {
+  overviewHref: string;
+  previousHref?: string | null;
+  nextHref?: string | null;
+  ariaLabel?: string;
+  showPreviousControl?: boolean;
+  showNextControl?: boolean;
+  bottomSpacingUnits?: number;
+}
+
+const {
+  overviewHref,
+  previousHref = null,
+  nextHref = null,
+  ariaLabel = 'Detailnavigatie',
+  showPreviousControl = true,
+  showNextControl = true,
+  bottomSpacingUnits = 4,
+} = Astro.props;
+---
+
+<div class="detail-nav-slot" style={`--detail-nav-bottom-space: calc(var(--grid-y) * ${bottomSpacingUnits});`}>
+  <nav class="detail-nav-bar" aria-label={ariaLabel}>
+    {showPreviousControl ? (
+      <a
+        class="detail-nav-link detail-nav-link--prev"
+        href={previousHref ?? overviewHref}
+        aria-disabled={!previousHref}
+        aria-label="Vorige"
+      >
+        ←
+      </a>
+    ) : (
+      <span class="detail-nav-spacer" aria-hidden="true"></span>
+    )}
+
+    <a class="detail-nav-link detail-nav-link--up" href={overviewHref} aria-label="Terug naar overzicht">↑</a>
+
+    {showNextControl ? (
+      <a
+        class="detail-nav-link detail-nav-link--next"
+        href={nextHref ?? overviewHref}
+        aria-disabled={!nextHref}
+        aria-label="Volgende"
+      >
+        →
+      </a>
+    ) : (
+      <span class="detail-nav-spacer" aria-hidden="true"></span>
+    )}
+  </nav>
+</div>
+
+<style>
+  .detail-nav-slot {
+    width: 100%;
+    margin-top: auto;
+    padding-top: calc(var(--grid-y) * 2);
+    padding-bottom: var(--detail-nav-bottom-space);
+  }
+
+  .detail-nav-bar {
+    width: calc(100vw - 64px);
+    min-height: calc(var(--grid-y) * 2);
+    margin-left: calc(50% - 50vw + 32px);
+    padding: 0 32px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--grid-x);
+    background: rgb(0 0 0 / 0.1);
+    border-radius: 999px;
+  }
+
+  .detail-nav-link,
+  .detail-nav-spacer {
+    min-height: calc(var(--grid-y) * 2);
+    min-width: calc(var(--grid-y) * 2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-size: 1rem;
+  }
+
+  .detail-nav-link {
+    color: rgb(0 0 0 / 0.6);
+    text-decoration: none;
+  }
+
+  .detail-nav-link:hover,
+  .detail-nav-link:focus-visible {
+    color: var(--text);
+  }
+
+  .detail-nav-link[aria-disabled='true'] {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+</style>

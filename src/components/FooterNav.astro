@@ -1,0 +1,275 @@
+---
+interface NavItem {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  navItems?: NavItem[];
+  currentPath?: string;
+}
+
+const { navItems = [], currentPath = '/' } = Astro.props;
+
+const normalizePath = (value: string) => {
+  if (!value || value === '/') {
+    return '/';
+  }
+
+  return value.endsWith('/') ? value : `${value}/`;
+};
+
+const activePath = normalizePath(currentPath);
+
+const isActive = (href: string) => {
+  const target = normalizePath(href);
+
+  if (target === '/') {
+    return activePath === '/';
+  }
+
+  return activePath === target || activePath.startsWith(target);
+};
+---
+
+{navItems.length > 0 && (
+  <nav class="footer-menu" aria-label="Navigatie" data-footer-menu>
+    <button
+      class="footer-menu-toggle"
+      type="button"
+      aria-label="Menu openen"
+      aria-expanded="false"
+      aria-controls="footer-menu-list"
+    >
+      <span class="footer-menu-toggle__icon" aria-hidden="true"></span>
+    </button>
+
+    <ul id="footer-menu-list" class="footer-nav">
+      {navItems.map((item) => (
+        <li>
+          <a href={item.href} class:list={{ active: isActive(item.href) }}>{item.label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .footer-menu {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .footer-menu-toggle {
+    display: none;
+    height: 60px;
+    min-height: 60px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #6d6d6d;
+    font-size: 0.666667rem;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    align-items: center;
+    gap: 0;
+    cursor: pointer;
+  }
+
+  .footer-menu-toggle__icon {
+    position: relative;
+    display: block;
+    width: 16px;
+    height: 2px;
+    background: currentColor;
+  }
+
+  .footer-menu-toggle__icon::before,
+  .footer-menu-toggle__icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 16px;
+    height: 2px;
+    background: currentColor;
+  }
+
+  .footer-menu-toggle__icon::before {
+    top: -5px;
+  }
+
+  .footer-menu-toggle__icon::after {
+    top: 5px;
+  }
+
+  .footer-nav {
+    margin: 0;
+    padding: 0 32px 0 0;
+    height: 60px;
+    min-height: 60px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: var(--grid-x);
+    list-style: none;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .footer-nav::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .footer-nav > li {
+    flex: 0 0 auto;
+    line-height: 1;
+  }
+
+  .footer-nav a {
+    color: #6d6d6d;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1;
+    font-size: 0.666667rem;
+    letter-spacing: 0.01em;
+  }
+
+  .footer-nav a:hover,
+  .footer-nav a:focus-visible,
+  .footer-menu-toggle:hover,
+  .footer-menu-toggle:focus-visible {
+    color: var(--rood-3);
+  }
+
+  .footer-nav a.active {
+    color: var(--text);
+  }
+
+  .footer-menu.is-collapsed .footer-menu-toggle {
+    display: inline-flex;
+  }
+
+  .footer-menu.is-collapsed .footer-nav {
+    display: none;
+  }
+
+  .footer-menu.is-collapsed.is-open .footer-nav {
+    display: flex;
+    position: fixed;
+    left: var(--footer-edge-offset, 32px);
+    right: var(--footer-edge-offset, 32px);
+    bottom: 60px;
+    height: auto;
+    min-height: 0;
+    max-height: min(60vh, 432px);
+    padding: calc(var(--grid-y) * 1) calc(var(--grid-x) * 1);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(var(--grid-y) * 1);
+    overflow-y: auto;
+    overflow-x: hidden;
+    white-space: normal;
+    background: var(--surface);
+    border-top: 1px solid rgb(0 0 0 / 0.4);
+    box-shadow: 0 -4px 14px rgb(0 0 0 / 0.12);
+    z-index: 40;
+    scrollbar-width: thin;
+    -ms-overflow-style: auto;
+  }
+
+  .footer-menu.is-collapsed.is-open .footer-nav::-webkit-scrollbar {
+    display: block;
+    width: 8px;
+    height: 8px;
+  }
+
+  .footer-menu.is-collapsed.is-open .footer-nav > li {
+    width: 100%;
+    flex: 1 0 auto;
+  }
+
+  .footer-menu.is-collapsed.is-open .footer-nav a {
+    display: block;
+    width: 100%;
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const menu = document.querySelector('[data-footer-menu]');
+    if (!menu) {
+      return;
+    }
+
+    const list = menu.querySelector('.footer-nav');
+    const toggle = menu.querySelector('.footer-menu-toggle');
+
+    if (!(list instanceof HTMLElement) || !(toggle instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    const closeMenu = () => {
+      menu.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Menu openen');
+    };
+
+    const updateLayout = () => {
+      if (menu.classList.contains('is-collapsed')) {
+        menu.classList.remove('is-collapsed', 'is-open');
+      }
+
+      const shouldCollapse = list.scrollWidth > list.clientWidth + 1;
+      menu.classList.toggle('is-collapsed', shouldCollapse);
+
+      if (!shouldCollapse) {
+        closeMenu();
+      }
+    };
+
+    toggle.addEventListener('click', () => {
+      if (!menu.classList.contains('is-collapsed')) {
+        return;
+      }
+
+      const isOpen = menu.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      toggle.setAttribute('aria-label', isOpen ? 'Menu sluiten' : 'Menu openen');
+    });
+
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!menu.classList.contains('is-open')) {
+        return;
+      }
+
+      if (event.target instanceof Node && !menu.contains(event.target)) {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeMenu();
+      }
+    });
+
+    window.addEventListener('resize', updateLayout);
+    window.addEventListener('load', updateLayout);
+
+    if ('fonts' in document && document.fonts?.ready) {
+      document.fonts.ready.then(updateLayout);
+    }
+
+    updateLayout();
+  })();
+</script>

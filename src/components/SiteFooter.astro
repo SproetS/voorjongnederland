@@ -1,0 +1,66 @@
+---
+import FooterNav from './FooterNav.astro';
+
+interface NavItem {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  navItems?: NavItem[];
+  currentPath?: string;
+}
+
+const { navItems = [], currentPath = '/' } = Astro.props;
+---
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <FooterNav navItems={navItems} currentPath={currentPath} />
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    --footer-edge-offset: 32px;
+    width: calc(100vw - (var(--footer-edge-offset) * 2));
+    height: 60px;
+    min-height: 60px;
+    box-sizing: border-box;
+    margin-inline: calc(50% - 50vw + var(--footer-edge-offset));
+    background: var(--surface);
+    position: sticky;
+    bottom: 0;
+    z-index: 12;
+    overflow: hidden;
+  }
+
+  .site-footer-inner {
+    height: 100%;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+  }
+
+  .site-footer::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+    background: rgb(0 0 0 / 0.4);
+  }
+
+  @media (max-width: 56rem) {
+    .site-footer {
+      --footer-edge-offset: calc(var(--grid-x) * 1.75);
+    }
+  }
+
+  @media (max-width: 36rem) {
+    .site-footer {
+      --footer-edge-offset: calc(var(--grid-x) * 1.25);
+    }
+  }
+</style>

@@ -1,0 +1,13 @@
+/* Webfont: GAPCode-Italic */@font-face {
+    font-family: 'GAPCode';
+    src: url('GAPCode-Italic.eot'); /* IE9 Compat Modes */
+    src: url('GAPCode-Italic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('GAPCode-Italic.woff2') format('woff2'), /* Modern Browsers */
+         url('GAPCode-Italic.woff') format('woff'), /* Modern Browsers */
+         url('GAPCode-Italic.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('GAPCode-Italic.svg#GAPCode-Italic') format('svg'); /* Legacy iOS */
+    font-style: italic;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+

@@ -1,0 +1,81 @@
+local_backend: true
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/sites/default/files/uploads
+public_folder: /sites/default/files/uploads
+locale: nl
+
+collections:
+  - name: pages
+    label: Pagina's
+    label_singular: Pagina
+    folder: src/content/pages
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Titel, name: title, widget: string }
+      - { label: Beschrijving, name: description, widget: text, required: false }
+      - { label: Navigatielabel, name: navLabel, widget: string, required: false }
+      - { label: Volgorde, name: order, widget: number, value_type: int, required: false }
+      - { label: Oude URL, name: oldPath, widget: string, required: false }
+      - { label: Feature image, name: featureImage, widget: image, required: false }
+      - { label: Feature image alt, name: featureImageAlt, widget: string, required: false }
+      - { label: Feature image tonen, name: showFeatureImage, widget: boolean, default: false, required: false }
+      - label: Home tegels
+        name: homeTiles
+        widget: list
+        required: false
+        fields:
+          - { label: Titel, name: title, widget: string }
+          - { label: Link, name: href, widget: string }
+          - { label: Tekst, name: text, widget: text }
+      - { label: Concept, name: draft, widget: boolean, default: false, required: false }
+      - { label: Inhoud, name: body, widget: markdown }
+
+  - name: blog
+    label: Nieuws
+    label_singular: Bericht
+    folder: src/content/blog
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    sortable_fields: [publishDate, title]
+    fields:
+      - { label: Titel, name: title, widget: string }
+      - { label: Samenvatting, name: excerpt, widget: text, required: false }
+      - { label: Publicatiedatum, name: publishDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false }
+      - { label: Updated datum, name: updatedDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, required: false }
+      - { label: Feature image, name: featureImage, widget: image, required: false }
+      - { label: Feature image alt, name: featureImageAlt, widget: string, required: false }
+      - { label: Feature image tonen, name: showFeatureImage, widget: boolean, default: false, required: false }
+      - { label: Concept, name: draft, widget: boolean, default: false, required: false }
+      - { label: Inhoud, name: body, widget: markdown }
+
+  - name: podcasts
+    label: Radio
+    label_singular: Aflevering
+    folder: src/content/podcasts
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    sortable_fields: [publishDate, episodeNumber, title]
+    fields:
+      - { label: Titel, name: title, widget: string }
+      - { label: Samenvatting, name: excerpt, widget: text, required: false }
+      - { label: Publicatiedatum, name: publishDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false }
+      - { label: Updated datum, name: updatedDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, required: false }
+      - { label: Afleveringsnummer, name: episodeNumber, widget: number, value_type: int, required: false }
+      - { label: Duur, name: duration, widget: string, required: false }
+      - { label: Audio URL, name: audioUrl, widget: string, required: false }
+      - { label: Feature image, name: featureImage, widget: image, required: false }
+      - { label: Feature image alt, name: featureImageAlt, widget: string, required: false }
+      - { label: Oude URL, name: oldPath, widget: string, required: false }
+      - { label: Feature image tonen, name: showFeatureImage, widget: boolean, default: false, required: false }
+      - { label: Concept, name: draft, widget: boolean, default: false, required: false }
+      - { label: Inhoud, name: body, widget: markdown }

@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const episodes = await getCollection('podcasts', ({ data }) => !data.draft);
+
+  return episodes.map((episode) => ({
+    params: { slug: episode.id },
+  }));
+}
+
+const slug = Astro.params.slug;
+if (!slug) {
+  throw new Error('Slug ontbreekt voor podcasts redirect.');
+}
+
+return Astro.redirect(`/radio/${slug}/`, 301);
+---

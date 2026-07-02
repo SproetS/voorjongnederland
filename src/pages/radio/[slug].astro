@@ -1,0 +1,67 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { getMainNavItems } from '../../lib/navigation';
+import DetailNavBar from '../../components/DetailNavBar.astro';
+
+export async function getStaticPaths() {
+  const episodes = await getCollection('podcasts', ({ data }) => !data.draft);
+
+  return episodes.map((episode) => ({
+    params: { slug: episode.id },
+    props: { episode },
+  }));
+}
+
+const { episode } = Astro.props as { episode: CollectionEntry<'podcasts'> };
+
+const navItems = await getMainNavItems();
+
+const { Content } = await render(episode);
+---
+
+<Layout
+  title={episode.data.title}
+  description={episode.data.excerpt}
+  navItems={navItems}
+  pageClass="page-podcasts-detail"
+  currentPath="/radio/"
+>
+  <section class="content-column detail-page-shell">
+    <article class="article-body">
+    <header class="article-header">
+      <h1>{episode.data.title}</h1>
+      <p class="meta">
+        {episode.data.publishDate.toLocaleDateString('nl-NL', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}
+        {episode.data.duration && ` · ${episode.data.duration}`}
+      </p>
+    </header>
+
+    {episode.data.featureImage && (
+      <figure class="podcast-detail-media">
+        <img src={episode.data.featureImage} alt={episode.data.featureImageAlt ?? episode.data.title} />
+      </figure>
+    )}
+
+    {episode.data.audioUrl && (
+      <audio class="podcast-audio" controls preload="none" src={episode.data.audioUrl}>
+        Je browser ondersteunt geen audio element.
+      </audio>
+    )}
+
+    <Content />
+
+    </article>
+
+    <DetailNavBar
+      overviewHref="/radio/"
+      ariaLabel="Radionavigatie"
+      showPreviousControl={false}
+      showNextControl={false}
+    />
+  </section>
+</Layout>

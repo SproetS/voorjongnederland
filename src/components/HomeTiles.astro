@@ -1,0 +1,62 @@
+---
+interface HomeTile {
+  title: string;
+  href: string;
+  text: string;
+}
+
+interface Props {
+  tiles?: HomeTile[];
+}
+
+const { tiles = [] } = Astro.props;
+---
+
+{tiles.length > 0 && (
+  <section class="home-tiles" aria-label="Uitgelichte onderwerpen">
+    {tiles.map((tile) => (
+      <article class="home-tile">
+        <h2><a href={tile.href}>{tile.title}</a></h2>
+        <p>{tile.text}</p>
+      </article>
+    ))}
+  </section>
+)}
+
+<style>
+  .home-tiles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: calc(var(--grid-y) * 2) calc(var(--grid-x) * 2);
+  }
+
+  .home-tile h2 {
+    margin: 0 0 calc(var(--grid-y) * 1);
+    font-size: 1rem;
+    line-height: calc(var(--grid-y) * 2);
+    font-weight: 700;
+  }
+
+  .home-tile h2 a {
+    color: var(--blauw-2);
+    text-decoration: none;
+  }
+
+  .home-tile p {
+    margin: 0;
+    font-size: 0.888889rem;
+    line-height: calc(var(--grid-y) * 2);
+  }
+
+  @media (max-width: 70rem) {
+    .home-tiles {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 44rem) {
+    .home-tiles {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

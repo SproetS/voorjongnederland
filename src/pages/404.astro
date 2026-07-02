@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getMainNavItems } from '../lib/navigation';
+
+const navItems = await getMainNavItems();
+---
+
+<Layout title="Pagina niet gevonden" description="Deze pagina bestaat niet." navItems={navItems} currentPath="/404/">
+  <section class="content-column">
+    <h1>Pagina niet gevonden</h1>
+    <p>De pagina die je zocht bestaat niet of is verplaatst.</p>
+    <p><a class="read-more" href="/">naar de homepage</a></p>
+  </section>
+</Layout>
