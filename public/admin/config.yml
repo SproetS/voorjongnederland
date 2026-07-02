@@ -3,6 +3,8 @@ backend:
   name: github
   repo: SproetS/voorjongnederland
   branch: main
+  base_url: https://decap-auth.voorjongnederland.nl
+  auth_endpoint: auth
 
 media_folder: public/sites/default/files/uploads
 public_folder: /sites/default/files/uploads
