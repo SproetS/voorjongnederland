@@ -2,8 +2,9 @@
 title: De Grote Verbouwing
 excerpt: De Grote Verbouwing voor Jong Nederland
 publishDate: 2026-07-07
-showFeatureImage: true
 featureImage: /assets/images/blog2.png
+featureImageAlt: Koloniegebouw voor Jong Nederland in de steigers
+showFeatureImage: true
 ---
 
 We zijn er minstens vier à vijf jaar mee bezig; De Grote Verbouwing. Vrijwillige huursverhoging, regelen van financiering en ingewikkeld gesteggel met instanties ging er aan vooraf. Nu zijn we eindelijk onderweg.
