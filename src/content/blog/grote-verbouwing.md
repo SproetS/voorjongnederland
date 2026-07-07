@@ -15,7 +15,6 @@ De grote verbouwing vraagt veel van aannemer Pronk en de bewoners want tijdens d
 ### Dank
 
 * Caas architecten
-* Bouwbedrijf Pronk
 * Trajectus bouwbegeleiding
 * Noordwest bouwmanagement
 * Restauratiefonds
