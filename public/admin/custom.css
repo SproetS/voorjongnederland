@@ -1,0 +1,132 @@
+@font-face {
+  font-family: 'GAP Zuid VG';
+  src: url('/fonts/GAPZuidVG-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GAP Zuid VG';
+  src: url('/fonts/GAPZuidVG-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GAP Zuid VG';
+  src: url('/fonts/GAPZuidVG-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GAP Zuid VG';
+  src: url('/fonts/GAPZuidVG-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GAP Code';
+  src: url('/fonts/GAPCode-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GAP Code';
+  src: url('/fonts/GAPCode-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GAP Code';
+  src: url('/fonts/GAPCode-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GAP Code';
+  src: url('/fonts/GAPCode-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --vjnl-admin-font-sans: 'GAP Zuid VG', 'Segoe UI', Arial, sans-serif;
+  --vjnl-admin-font-mono: 'GAP Code', ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+}
+
+body,
+button,
+input,
+select,
+[role='button'],
+[class*='ToolbarContainer'],
+[class*='WidgetTopBar'],
+[class*='nc-appHeader'] {
+  font-family: var(--vjnl-admin-font-sans) !important;
+}
+
+/* Force GAP Code in markdown/code editing surfaces (including legacy Netlify/Decap selectors) */
+textarea,
+textarea[name='body'],
+[class*='MarkdownControl'] textarea,
+[class*='EditorControl'] textarea,
+[class*='nc-entryEditor-textarea'],
+[class*='nc-entryEditor-textControl'] textarea,
+.CodeMirror,
+.CodeMirror pre,
+.CodeMirror-code,
+.CodeMirror-line,
+.CodeMirror-line-like,
+[class*='CodeMirror'],
+[class*='CodeMirror'] *,
+[class*='cm-editor'],
+[class*='cm-editor'] *,
+[class*='cm-content'],
+[data-slate-editor='true'],
+[data-plate-editor='true'],
+[contenteditable='true'][role='textbox'],
+pre,
+code,
+kbd,
+samp {
+  font-family: var(--vjnl-admin-font-mono) !important;
+}
+
+/* keep Decap preview pane fluid */
+[class*='PreviewPane'],
+[class*='previewPane'],
+[class*='nc-entryEditor-previewPane'] {
+  min-width: 0 !important;
+}
+
+[class*='PreviewPane'] iframe,
+[class*='previewPane'] iframe,
+[class*='nc-entryEditor-previewPane'] iframe {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* hard override rich text editor typography */
+[data-slate-editor='true'],
+[data-slate-editor='true'] *,
+[data-plate-editor='true'],
+[data-plate-editor='true'] *,
+[contenteditable='true'][role='textbox'],
+[contenteditable='true'][role='textbox'] *,
+[class*='RichTextControl'] [contenteditable='true'],
+[class*='RichTextControl'] [contenteditable='true'] * {
+  font-family: var(--vjnl-admin-font-mono) !important;
+}
